@@ -28,7 +28,7 @@
         @if(auth()->check())
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <form action="{{route('add_reply', $thread)}}" method="POST">
+                    <form action="{{route('add_reply', [$thread->channel, $thread])}}" method="POST">
                         @csrf
                         <div class="form-group">
                             <textarea name="body" id="body" class="form-control" rows="5" placeholder="Have something to say?"></textarea>
