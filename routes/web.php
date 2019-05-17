@@ -21,4 +21,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('threads', 'ThreadsController');
 
-Route::post('/threads/{thread}/replies', 'RepliesController@store');
+Route::post('/threads/{thread}/replies', 'RepliesController@store')->name('add_reply');
