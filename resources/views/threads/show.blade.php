@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <textarea name="body" id="body" class="form-control" rows="5" placeholder="Have something to say?"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">post</button>
+                        <button type="submit" class="btn btn-primary">Post</button>
                     </form>
                 </div>
             </div>
