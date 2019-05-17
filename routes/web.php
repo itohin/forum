@@ -15,8 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('threads', 'ThreadsController');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('threads', 'ThreadsController');
+
+Route::post('/threads/{thread}/replies', 'RepliesController@store');
