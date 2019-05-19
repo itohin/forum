@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center mb-4">
+        <div class="row">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header">
                         <a href="">{{ $thread->creator->name }}</a> posted:
                         {{ $thread->title }}
@@ -14,20 +14,12 @@
                         {{ $thread->body }}
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-8">
                 @foreach($thread->replies as $reply)
                     @include('threads.reply')
                 @endforeach
-            </div>
-        </div>
 
-        @if(auth()->check())
-            <div class="row justify-content-center">
-                <div class="col-md-8">
+                @if(auth()->check())
                     <form action="{{route('add_reply', [$thread->channel, $thread])}}" method="POST">
                         @csrf
                         <div class="form-group">
@@ -35,10 +27,11 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Post</button>
                     </form>
-                </div>
+                @else
+                    <p class="text-center">Please <a href="{{route('login')}}">sign in</a> to participate in this discussion.</p>
+                @endif
+
             </div>
-        @else
-            <p class="text-center">Please <a href="{{route('login')}}">sign in</a> to participate in this discussion.</p>
-        @endif
+        </div>
     </div>
 @endsection
