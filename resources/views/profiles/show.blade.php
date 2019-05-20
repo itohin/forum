@@ -3,34 +3,38 @@
 @section('content')
 
     <div class="container">
-        <div class="page-header">
-            <h1>
-                {{ $profileUser->name }}
-                <small>{{ $profileUser->created_at->diffForHumans() }}</small>
-            </h1>
-        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h1>
+                        {{ $profileUser->name }}
+                        <small>{{ $profileUser->created_at->diffForHumans() }}</small>
+                    </h1>
+                </div>
 
-        @foreach($threads as $thread)
-            <div class="card mb-4">
-                <div class="card-header">
-                    <div class="level">
+                @foreach($threads as $thread)
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <div class="level">
                         <span class="flex">
-                            <a href="/profiles/{{$thread->creator->name}}">{{ $thread->creator->name }}</a> posted:
-                            {{ $thread->title }}
+                            <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
+                            <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
                         </span>
                         <span>
                             {{ $thread->created_at->diffForHumans() }}
                         </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            {{ $thread->body }}
+                        </div>
                     </div>
-                </div>
+                @endforeach
 
-                <div class="card-body">
-                    {{ $thread->body }}
-                </div>
+                {{ $threads->links() }}
             </div>
-        @endforeach
-
-        {{ $threads->links() }}
+        </div>
     </div>
 
 @endsection
