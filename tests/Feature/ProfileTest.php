@@ -22,11 +22,11 @@ class ProfileTest extends TestCase
     /** @test */
     public function  profileShowAllThreadsByUser()
     {
-        $user = create('App\User');
+        $this->signIn();
 
-        $thread = create('App\Thread', ['user_id' => $user->id]);
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
 
-        $this->get('/profiles/' . $user->name)
+        $this->get(route('profile', auth()->user()))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }
