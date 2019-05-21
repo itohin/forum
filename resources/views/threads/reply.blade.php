@@ -7,12 +7,7 @@
                 said {{ $reply->created_at->diffForHumans() }}
             </h5>
             <div>
-                <form action="{{route('favorites.reply', $reply)}}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-secondary" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                        {{ $reply->favorites_count }} {{ \Illuminate\Support\Str::plural('Favorite', $reply->favorites_count) }}
-                    </button>
-                </form>
+                <favorite :reply="{{ $reply }}"></favorite>
             </div>
         </div>
     </div>
