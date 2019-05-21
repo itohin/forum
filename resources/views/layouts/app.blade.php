@@ -38,6 +38,8 @@
             margin: 40px 0 20px;
             border-bottom: 1px solid #eee;
         }
+
+        [v-cloak] { display: none }
     </style>
 </head>
 <body>
