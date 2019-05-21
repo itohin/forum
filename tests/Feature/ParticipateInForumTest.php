@@ -43,4 +43,30 @@ class ParticipateInForumTest extends TestCase
         $this->post($thread->path(). '/replies', $reply->toArray())
             ->assertSessionHasErrors('body');
     }
+
+    /** @test */
+    public function unauthUsersCannotDeleteReplies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create('App\Reply');
+
+        $this->delete(route('reply.delete', $reply))
+            ->assertRedirect(route('login'));
+
+        $this->signIn()
+            ->delete(route('reply.delete', $reply))
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authUsersCanDeleteReplies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $this->delete(route('reply.delete', $reply));
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
 }
