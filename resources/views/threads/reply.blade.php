@@ -31,13 +31,7 @@
         <div class="card-footer level">
 
             <button class="btn btn-outline-secondary btn-sm mr-2" @click="editing=true">Edit</button>
-
-            <form action="{{ route('reply.delete', $reply) }}" method="POST">
-                @csrf
-                @method('DELETE')
-
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
+            <button class="btn btn-danger btn-sm mr-2" @click="destroy">Delete</button>
         </div>
     @endcan
 </div>
