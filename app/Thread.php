@@ -10,6 +10,9 @@ class Thread extends Model
     use RecordsActivity;
 
     protected $guarded = [];
+
+    protected $appends = ['isSubscribedTo'];
+
     protected $with = ['creator', 'channel'];
 
     protected static function boot()
@@ -66,6 +69,11 @@ class Thread extends Model
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
+    }
+
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()->where('user_id', auth()->id())->exists();
     }
 
 
