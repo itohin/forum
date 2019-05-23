@@ -28,6 +28,28 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function threadCanBeSubscribedTo()
+    {
+        $thread = create('App\Thread');
+
+        $thread->subscribe($userId = 1);
+
+        $this->assertEquals(1, $thread->subscriptions()->where('user_id', $userId)->count());
+    }
+
+    /** @test */
+    public function threadCanBeUnsubscribedFrom()
+    {
+        $thread = create('App\Thread');
+
+        $thread->subscribe($userId = 1);
+
+        $thread->unsubscribe($userId);
+
+        $this->assertCount(0, $thread->subscriptions);
+    }
+
+    /** @test */
     public function itHasReplies()
     {
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->thread->replies);
