@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -44,24 +44,20 @@ class RepliesController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
+        try {
+            $this->validateReply();
 
-        $spam->detect(request('body'));
-
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
-
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ]);
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time', 422);
         }
 
-        return back()->with('flash', 'Your reply has been left!');
+        return $reply->load('owner');
     }
 
     /**
@@ -86,18 +82,26 @@ class RepliesController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        $reply->update(['body' => request('body')]);
+        try {
+            $this->validateReply();
+
+            $reply->update(['body' => request('body')]);
+
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time', 422);
+        }
     }
 
 
@@ -120,5 +124,12 @@ class RepliesController extends Controller
         }
 
         return back();
+    }
+
+    public function validateReply()
+    {
+        $this->validate(request(), [
+            'body' => ['required', new SpamFree],
+        ]);
     }
 }
