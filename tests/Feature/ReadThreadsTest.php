@@ -20,7 +20,6 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function aUserCanViewAllThreads()
     {
-        $this->signIn();
         $this->get('/threads')
             ->assertSee($this->thread->title);
     }
@@ -35,8 +34,6 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function aUserCanFilterThreadsByChannel()
     {
-        $this->signIn();
-
         $channel = create('App\Channel');
         $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
         $threadNotInChannel = create('App\Thread');
