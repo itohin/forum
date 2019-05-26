@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Spam;
+use App\Inspections\Spam;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,8 +16,20 @@ class SpamTest extends TestCase
     {
         $spam = new Spam();
 
-        $body = 'Some comment';
+        $this->assertFalse($spam->detect('Some comment'));
 
-        $this->assertFalse($spam->detect($body));
+        $this->expectException(\Exception::class);
+
+        $spam->detect('yahoo customer support');
+    }
+
+    /** @test */
+    public function itCheckKeyHeldDown()
+    {
+        $spam = new Spam();
+
+        $this->expectException(\Exception::class);
+
+        $spam->detect('Helo world aaaaaaaaaaaaaaaa');
     }
 }
